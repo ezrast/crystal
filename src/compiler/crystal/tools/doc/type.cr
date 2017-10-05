@@ -556,7 +556,13 @@ class Crystal::Doc::Type
   end
 
   private def nilable_type_to_html(node : ASTNode, io, links)
-    node_to_html node, io, links: links
+    if node.is_a?(ProcNotation)
+      io << "("
+      node_to_html node, io, links: links
+      io << ")"
+    else
+      node_to_html node, io, links: links
+    end
     io << "?"
   end
 
