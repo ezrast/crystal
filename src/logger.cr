@@ -1,6 +1,7 @@
+require "logger/component"
+require "logger/emitter"
 require "logger/entry"
 require "logger/filter"
-require "logger/emitter"
 require "logger/severity"
 
 class Logger
@@ -31,6 +32,10 @@ class Logger
         log Entry.new(message, Severity::{{ level }}, component, time, line_number, filename)
       end
     {% end %}
+
+    def get(component)
+      Component.new(component.to_s, self)
+    end
   end
 
   include Base
@@ -45,10 +50,6 @@ class Logger
   class_property component = ""
   class_property filter : FilterType?
   class_property emitter : EmitterType? = IOEmitter.new
-
-  def self.get(component)
-    Logger.new(component.to_s, nil, Forwarder.new(self))
-  end
 
   {% for level in Severity.constants %}
     {{ level }} = Severity::{{ level }}

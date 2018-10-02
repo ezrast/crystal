@@ -21,17 +21,4 @@ class Logger
       @formatter.call(@io, entry)
     end
   end
-
-  class Forwarder
-    include Emitter
-
-    getter dest : Base
-
-    def initialize(@dest)
-    end
-
-    def call(entry : Entry)
-      dest.log(entry)
-    end
-  end
 end
